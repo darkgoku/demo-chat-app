@@ -1,0 +1,23 @@
+name: Lint and Test Python on Push
+
+on: push
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.7"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements_dev.txt
+          python setup.py develop
+
+      - name: Lint with Black
+        run: black . --check --verbose
+        # TODO: add tests, upload codecov
