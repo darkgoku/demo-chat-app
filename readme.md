@@ -1,6 +1,6 @@
 # Demo Chat App
 
-In which we learn how to manager users with sockets.
+In which we learn how to manage users with sockets.
 
 ## Dev
 
