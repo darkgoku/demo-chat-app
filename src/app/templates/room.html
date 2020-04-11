@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+</head>
+
+<body>
+    <h1>Room: {{code}}</h1>
+    <div class="message_holder"></div>
+
+    <form action="" method="POST">
+        <input type="text" class="message" placeholder="Messages" />
+        <input type="submit" />
+    </form>
+
+    <script type="text/javascript">
+        var socket = io.connect();
+
+        $('form').on('submit', function (e) {
+            e.preventDefault()
+            socket.emit('new_message', $('input.message').val())
+            $('input.message').val('').focus()
+        })
+
+        socket.on('message_recieved', function (messages) {
+            $('div.message_holder').empty();
+            console.log(messages)
+            messages.forEach(function (m) {
+                $('div.message_holder').append(
+                    '<div><b style="color: #000">' + m.username + '</b> ' + m.message + '</div>'
+                )
+            })
+
+
+        })
+    </script>
+
+</body>
+
+</html>
