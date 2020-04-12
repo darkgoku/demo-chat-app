@@ -1,11 +1,9 @@
 import os
 import signal
 import subprocess
+import time
 
 import pytest
-from flask import url_for
-
-import app as flask_app
 
 
 @pytest.fixture(scope="module")
@@ -38,5 +36,5 @@ def test_one_user_joining_room_sending_message(selenium, server):
     # send a message and check it comes back
     selenium.find_element_by_name("message").send_keys("hi paris what is up")
     selenium.find_element_by_tag_name("form").submit()
-
+    time.sleep(0.05)
     assert "hi paris what is up" in selenium.page_source

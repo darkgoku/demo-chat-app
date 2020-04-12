@@ -6,3 +6,5 @@
 *.pyc
 .vscode
 .tox
+coverage.xml
+.coverage
