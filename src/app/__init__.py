@@ -1,4 +1,3 @@
-
 from flask import Flask, redirect, render_template, request, session, url_for
 from flask_socketio import SocketIO, join_room
 

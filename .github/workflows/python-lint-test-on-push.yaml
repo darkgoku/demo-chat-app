@@ -1,0 +1,35 @@
+name: Lint and Test Python on Push
+
+on: push
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
+        with:
+          python-version: "3.7"
+
+      - name: Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements_dev.txt
+          python setup.py develop
+
+      - name: Lint with Black
+        run: black . --check --verbose
+
+      - name: Unit Testing
+        run: |
+          pytest --verbose -s --driver Chrome --cov=app --cov-report=xml
+          coverage report -m
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.0.2
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          name: python3.7
+          file: ./coverage.xml
+        continue-on-error: true # I don't care THAT much about codecov

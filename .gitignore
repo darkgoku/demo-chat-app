@@ -5,3 +5,6 @@
 *.egg-info
 *.pyc
 .vscode
+.tox
+coverage.xml
+.coverage
