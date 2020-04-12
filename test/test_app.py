@@ -1,18 +1,35 @@
+import multiprocessing
 import os
 import signal
-import subprocess
+import sys
 import time
 
 import pytest
+from pytest_cov.embed import cleanup_on_sigterm
+
+from app.wsgi import http_server
 
 
 @pytest.fixture(scope="module")
 def server():
     """Run the flask server for the duration of tests in this module."""
-    proc = subprocess.Popen(["flask", "run"])
-    yield proc
-    # tests are now over, kill the process
-    os.kill(proc.pid, signal.SIGTERM)
+    cleanup_on_sigterm()
+    p = multiprocessing.Process(target=http_server.serve_forever)
+    p.start()
+    yield p
+
+    p.terminate()
+
+    print("Waiting for process to terminate.")
+    for i in range(10):
+        if not p.is_alive():
+            print("    ... process is dead.")
+            break
+        time.sleep(0.2)
+        print("    ... waiting")
+
+    p.join()
+    p.close()
 
 
 @pytest.fixture

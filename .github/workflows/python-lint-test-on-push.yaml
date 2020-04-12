@@ -22,12 +22,14 @@ jobs:
         run: black . --check --verbose
 
       - name: Unit Testing
-        run: pytest --verbose -s --driver Chrome --cov=./ --cov-report=xml
+        run: |
+          pytest --verbose -s --driver Chrome --cov=app --cov-report=xml
+          coverage report -m
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1.0.2
         with:
           token: ${{secrets.CODECOV_TOKEN}}
-          name: ${{matrix.python-version}}
+          name: python3.7
           file: ./coverage.xml
         continue-on-error: true # I don't care THAT much about codecov
