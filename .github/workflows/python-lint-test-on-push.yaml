@@ -20,4 +20,6 @@ jobs:
 
       - name: Lint with Black
         run: black . --check --verbose
-        # TODO: add tests, upload codecov
+
+      - name: Unit Testing
+        run: pytest --verbose -s --driver Chrome
